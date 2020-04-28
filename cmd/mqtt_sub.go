@@ -44,10 +44,10 @@ func InitMQTTClient(clientid string, deliveries *chan string) {
 		opts.SetStore(MQTT.NewFileStore(store))
 	}
 
-	choke := make(chan [1]string)
+	choke := make(chan [2]string, 25)
 
 	opts.SetDefaultPublishHandler(func(client MQTT.Client, msg MQTT.Message) {
-		choke <- [1]string{msg.Topic(), string(msg.Payload())}
+		choke <- [2]string{msg.Topic(), string(msg.Payload())}
 	})
 
 	client := MQTT.NewClient(opts)
